@@ -16,6 +16,8 @@ module Avo
             nil_client
           when :pundit
             pundit_client
+          when :cancan
+            cancan_client
           else
             if client.is_a?(String)
               client.safe_constantize
@@ -99,7 +101,11 @@ module Avo
 
           Avo::Services::AuthorizationClients::PunditClient
         end
+        def cancan_client
+          raise Avo::MissingGemError.new("Please add `gem 'cancancan'` to your Gemfile.") unless defined?(Ability)
 
+          Avo::Services::AuthorizationClients::CancanClient
+        end
         def nil_client
           Avo::Services::AuthorizationClients::NilClient
         end
